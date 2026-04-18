@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Learning Studio | Download History</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ---------------------------------------
+RESET
+--------------------------------------- */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+/* ---------------------------------------
+BODY
+--------------------------------------- */
+
+body{
+
+font-family:"Inter",sans-serif;
+
+background:url("/static/css/bg.webp") center/cover no-repeat fixed;
+
+min-height:100vh;
+
+padding:50px;
+
+color:white;
+
+}
+
+/* overlay */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,0.55);
+
+z-index:-1;
+
+}
+
+/* ---------------------------------------
+HEADER
+--------------------------------------- */
+
+.header{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+margin-bottom:30px;
+
+}
+
+.title{
+
+font-size:28px;
+
+font-weight:700;
+
+}
+
+/* ---------------------------------------
+BUTTON
+--------------------------------------- */
+
+.back-btn{
+
+padding:10px 18px;
+
+border-radius:10px;
+
+text-decoration:none;
+
+color:white;
+
+background:linear-gradient(
+135deg,
+#ff2d95,
+#c026d3,
+#7c3aed
+);
+
+font-weight:600;
+
+}
+
+/* ---------------------------------------
+TABLE CARD
+--------------------------------------- */
+
+.card{
+
+background:rgba(255,255,255,0.15);
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,.2);
+
+border-radius:20px;
+
+padding:30px;
+
+box-shadow:0 20px 50px rgba(0,0,0,.45);
+
+}
+
+/* ---------------------------------------
+TABLE
+--------------------------------------- */
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+margin-top:10px;
+
+}
+
+th{
+
+text-align:left;
+
+padding:14px;
+
+font-size:14px;
+
+background:rgba(0,0,0,.4);
+
+}
+
+td{
+
+padding:14px;
+
+border-top:1px solid rgba(255,255,255,.2);
+
+font-size:14px;
+
+}
+
+tr:hover{
+
+background:rgba(255,255,255,.1);
+
+}
+
+/* ---------------------------------------
+EMPTY STATE
+--------------------------------------- */
+
+.empty{
+
+text-align:center;
+
+padding:40px;
+
+opacity:.8;
+
+}
+
+/* ---------------------------------------
+TIMER
+--------------------------------------- */
+
+#timerBox{
+
+position:fixed;
+
+top:20px;
+
+right:20px;
+
+background:rgba(0,0,0,.6);
+
+padding:10px 16px;
+
+border-radius:10px;
+
+font-weight:600;
+
+backdrop-filter:blur(10px);
+
+}
+
+/* ---------------------------------------
+RESPONSIVE
+--------------------------------------- */
+
+@media(max-width:600px){
+
+body{
+padding:25px;
+}
+
+table{
+font-size:13px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="timerBox">
+⏱ <span id="timer">00:00</span>
+</div>
+
+<div class="header">
+
+<div class="title">
+Download History
+</div>
+
+<a class="back-btn" href="/">
+Back to Dashboard
+</a>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<tr>
+<th>File Name</th>
+<th>Date</th>
+</tr>
+
+{% for d in downloads %}
+
+<tr>
+
+<td>
+{{ d.file_name }}
+</td>
+
+<td>
+{{ d.download_time }}
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="2" class="empty">
+No downloads yet
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<script>
+
+/* SESSION TIMER */
+
+function updateTime(){
+
+const now = new Date()
+
+const options = {
+timeZone: "Asia/Kolkata",
+hour: "2-digit",
+minute: "2-digit",
+second: "2-digit",
+hour12: false
+}
+
+document.getElementById("timer").innerText =
+now.toLocaleTimeString("en-IN", options)
+
+}
+
+setInterval(updateTime,1000)
+
+updateTime()
+
+</script>
+
+</body>
+</html>

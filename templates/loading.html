@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing</title>
+</head>
+<body style="text-align:center; margin-top:100px; font-family:Arial;">
+
+    <h2>Generating worksheet... please wait</h2>
+    <p>This may take 1–3 minutes</p>
+
+    <script>
+    const jobId = "{{job_id}}";
+
+    async function checkStatus(){
+        const res = await fetch("/job-status/" + jobId);
+        const data = await res.json();
+
+        if(data.status === "done"){
+            window.location.href = "/result/" + jobId;
+        } else if(data.status === "error"){
+            alert("Error: " + data.error);
+        } else {
+            setTimeout(checkStatus, 2000);
+        }
+    }
+
+    checkStatus();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Learning Studio | Register</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ------------------------------------------
+RESET
+------------------------------------------ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+/* ------------------------------------------
+BODY
+------------------------------------------ */
+
+body{
+
+font-family:"Inter",sans-serif;
+
+height:100vh;
+
+background:url("/static/css/20082.jpg") center/cover no-repeat fixed;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+overflow:hidden;
+
+}
+
+/* dark overlay */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,0.55);
+
+z-index:-1;
+
+}
+
+/* ------------------------------------------
+FLOATING SHAPES
+------------------------------------------ */
+
+.circle{
+
+position:fixed;
+
+border-radius:50%;
+
+background:rgba(255,255,255,0.12);
+
+backdrop-filter:blur(10px);
+
+animation:float 12s infinite ease-in-out;
+
+}
+
+.circle.one{
+
+width:170px;
+height:170px;
+
+top:8%;
+left:6%;
+
+}
+
+.circle.two{
+
+width:140px;
+height:140px;
+
+bottom:10%;
+right:10%;
+
+}
+
+@keyframes float{
+
+0%{transform:translateY(0)}
+50%{transform:translateY(-40px)}
+100%{transform:translateY(0)}
+
+}
+
+/* ------------------------------------------
+REGISTER CARD
+------------------------------------------ */
+
+.register-container{
+
+width:540px;
+
+padding:70px;
+
+border-radius:24px;
+
+background:rgba(255,255,255,0.12);
+
+backdrop-filter:blur(20px);
+
+border:1px solid rgba(255,255,255,0.25);
+
+box-shadow:0 25px 60px rgba(0,0,0,.55);
+
+color:white;
+
+animation:fadeIn .8s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* ------------------------------------------
+TITLE
+------------------------------------------ */
+
+.logo{
+
+font-size:30px;
+
+font-weight:700;
+
+text-align:center;
+
+margin-bottom:8px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+font-size:14px;
+
+opacity:.85;
+
+margin-bottom:30px;
+
+}
+
+/* ------------------------------------------
+FORM
+------------------------------------------ */
+
+.form-group{
+
+margin-bottom:18px;
+
+}
+
+label{
+
+font-size:13px;
+
+font-weight:600;
+
+margin-bottom:6px;
+
+display:block;
+
+}
+
+input{
+
+width:100%;
+
+padding:18px;
+
+border-radius:12px;
+
+border:1px solid rgba(255,255,255,.25);
+
+background:rgba(255,255,255,.15);
+
+color:white;
+
+font-size:16px;
+
+outline:none;
+
+transition:.25s;
+
+}
+
+input:focus{
+
+border-color:#7c3aed;
+
+box-shadow:0 0 0 3px rgba(124,58,237,.35);
+
+}
+
+/* ------------------------------------------
+BUTTON
+------------------------------------------ */
+
+.register-btn{
+
+width:100%;
+
+padding:18px;
+
+border:none;
+
+border-radius:12px;
+
+font-weight:600;
+
+font-size:17px;
+
+cursor:pointer;
+
+background:linear-gradient(
+135deg,
+#ff2d95,
+#c026d3,
+#7c3aed
+);
+
+transition:.25s;
+
+}
+
+.register-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 12px 30px rgba(0,0,0,.45);
+
+}
+
+/* ------------------------------------------
+LINK
+------------------------------------------ */
+
+.login{
+
+margin-top:18px;
+
+text-align:center;
+
+font-size:14px;
+
+}
+
+.login a{
+
+color:white;
+
+font-weight:600;
+
+text-decoration:none;
+
+}
+
+/* ------------------------------------------
+TIMER
+------------------------------------------ */
+
+#timerBox{
+
+position:fixed;
+
+top:20px;
+right:20px;
+
+background:rgba(0,0,0,0.5);
+
+padding:10px 15px;
+
+border-radius:10px;
+
+font-weight:600;
+
+color:white;
+
+backdrop-filter:blur(10px);
+
+box-shadow:0 8px 20px rgba(0,0,0,.45);
+
+}
+
+/* ------------------------------------------
+RESPONSIVE
+------------------------------------------ */
+
+@media(max-width:520px){
+
+.register-container{
+width:90%;
+padding:35px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="circle one"></div>
+<div class="circle two"></div>
+
+<div id="timerBox">
+⏱ <span id="timer">00:00</span>
+</div>
+
+<div class="register-container">
+
+<div class="logo">
+Create Account
+</div>
+
+<div class="subtitle">
+Start using AI Learning Studio
+</div>
+
+<form method="POST" action="/register">
+
+<div class="form-group">
+<label>Username</label>
+<input name="username" required>
+</div>
+
+<div class="form-group">
+<label>School Name</label>
+<input name="school_name" required>
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="email" required>
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input type="password" name="password" required>
+</div>
+
+<button type="submit" class="register-btn">
+Create Account
+</button>
+</form>
+
+<div class="login">
+Already have an account?  
+<a href="/login">Login</a>
+</div>
+
+</div>
+
+<script>
+
+/* session timer */
+
+function updateTime(){
+
+const now = new Date()
+
+const options = {
+timeZone: "Asia/Kolkata",
+hour: "2-digit",
+minute: "2-digit",
+second: "2-digit",
+hour12: false
+}
+
+document.getElementById("timer").innerText =
+now.toLocaleTimeString("en-IN", options)
+
+}
+
+setInterval(updateTime,1000)
+
+updateTime()
+
+</script>
+
+</body>
+</html>

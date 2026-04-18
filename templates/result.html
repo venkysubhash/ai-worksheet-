@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Learning Dashboard</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+
+<style>
+
+/* ---------- Background ---------- */
+
+
+
+body{
+margin:0;
+font-family:Inter,Arial;
+background:url("/static/css/bg2.webp") center/cover no-repeat fixed;
+min-height:100vh;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.35);
+z-index:-1;
+}
+
+/* ---------- Header ---------- */
+
+.header{
+
+width:1400px;
+max-width:95%;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-top:30px;
+margin-bottom:25px;
+
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#4a5cff;
+}
+
+/* ---------- Layout ---------- */
+
+.container{
+
+width:1400px;
+max-width:95%;
+
+display:grid;
+grid-template-columns:1.5fr 1fr;
+
+gap:40px;
+
+}
+
+/* ---------- Cards ---------- */
+
+.card{
+background:rgba(255,255,255,0.95);
+border-radius:18px;
+padding:30px;
+box-shadow:0 20px 40px rgba(0,0,0,.25);
+}
+
+/* ---------- PDF Viewer ---------- */
+
+.pdf-viewer{
+width:100%;
+height:820px;
+border:none;
+border-radius:10px;
+background:white;
+}
+
+/* ---------- Robot ---------- */
+
+.robot-container{
+text-align:center;
+position:relative;
+}
+
+.robot{
+width:120px;
+animation:float 4s infinite ease-in-out;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+100%{transform:translateY(0)}
+}
+
+/* ---------- Eyes ---------- */
+
+.eye{
+width:10px;
+height:10px;
+background:black;
+border-radius:50%;
+position:absolute;
+animation:blink 4s infinite;
+}
+
+.eye-left{
+top:48px;
+left:52px;
+}
+
+.eye-right{
+top:48px;
+left:74px;
+}
+
+@keyframes blink{
+0%{transform:scaleY(1)}
+90%{transform:scaleY(1)}
+95%{transform:scaleY(.1)}
+100%{transform:scaleY(1)}
+}
+
+/* ---------- Speech bubble ---------- */
+
+.robot-speech{
+margin-top:12px;
+background:#4a5cff;
+color:white;
+padding:10px 18px;
+border-radius:20px;
+display:inline-block;
+font-size:14px;
+}
+
+/* ---------- Reading area ---------- */
+
+#readingText{
+margin-top:20px;
+background:#f4f5ff;
+padding:15px;
+border-radius:10px;
+max-height:250px;
+overflow:auto;
+line-height:1.7;
+font-size:15px;
+}
+
+.highlight{
+background:yellow;
+padding:2px 4px;
+border-radius:4px;
+}
+
+/* ---------- Buttons ---------- */
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:#4a5cff;
+color:white;
+font-size:14px;
+margin:4px;
+cursor:pointer;
+}
+
+/* ---------- Downloads ---------- */
+
+.download-btn{
+display:block;
+padding:15px;
+border-radius:10px;
+text-decoration:none;
+color:white;
+font-weight:600;
+margin-top:12px;
+text-align:center;
+}
+
+.student{
+background:#4a5cff;
+}
+
+.teacher{
+background:#7b6cff;
+}
+
+/* ---------- Confetti ---------- */
+
+.confetti{
+position:fixed;
+top:-20px;
+font-size:20px;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(900px) rotate(360deg);
+}
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:900px){
+
+.container{
+grid-template-columns:1fr;
+}
+
+.pdf-viewer{
+height:450px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+<div class="logo">
+AI Learning Studio
+</div>
+
+<div>
+Lesson Ready
+</div>
+
+</div>
+
+<!-- MAIN CONTENT -->
+
+<div class="container">
+
+<!-- LEFT PANEL -->
+
+<div class="card">
+
+<h3>Lesson Preview</h3>
+
+<iframe
+src="/lesson_files/{{ uploaded_pdf }}"
+class="pdf-viewer">
+</iframe>
+
+</div>
+
+<!-- RIGHT PANEL -->
+
+<div class="card">
+
+<div class="robot-container">
+
+<img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+class="robot"
+id="avatarBot">
+
+<div class="eye eye-left"></div>
+<div class="eye eye-right"></div>
+
+<div class="robot-speech" id="robotSpeech">
+Press Start to hear the lesson
+</div>
+
+</div>
+
+<div style="text-align:center;margin-top:15px">
+
+<button onclick="startReading(`{{ listen_text }}`)">
+Start
+</button>
+
+<button onclick="pauseReading()">Pause</button>
+
+<button onclick="resumeReading()">Resume</button>
+
+<button onclick="stopReading()">Stop</button>
+
+</div>
+
+<div id="readingText">
+{{ listen_text }}
+</div>
+
+<a
+href="/download/{{ docx_file }}"
+class="download-btn teacher">
+
+Download Editable DOCX
+
+</a>
+
+<a
+href="/download/{{ student_pdf }}"
+class="download-btn student"
+onclick="celebrate()">
+
+Download Student Worksheet
+
+</a>
+
+<a
+href="/download/{{ teacher_pdf }}"
+class="download-btn teacher">
+
+Download Teacher Answer Key
+
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+/* -------- Voice Reading -------- */
+let pdfId = "{{ uploaded_pdf }}"
+let chunks=[]
+let index=0
+let paused=false
+let lessonText = `{{ listen_text }}`
+
+function startReading(text){
+
+window.speechSynthesis.cancel()
+
+chunks=text.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g)
+
+index=0
+paused=false
+
+speak()
+
+}
+
+function speak(){
+
+if(index>=chunks.length){
+
+document.getElementById("robotSpeech").innerText="Great job explorer!"
+return
+
+}
+
+const speech=new SpeechSynthesisUtterance()
+
+speech.text=chunks[index]
+
+highlight(chunks[index])
+
+document.getElementById("robotSpeech").innerText=chunks[index]
+
+speech.rate=0.9
+speech.pitch=1.2
+
+speech.onend=function(){
+
+index++
+
+if(!paused){
+setTimeout(speak,400)
+}
+
+}
+
+window.speechSynthesis.speak(speech)
+
+}
+
+function pauseReading(){
+paused=true
+window.speechSynthesis.pause()
+}
+
+function resumeReading(){
+paused=false
+window.speechSynthesis.resume()
+}
+
+function stopReading(){
+window.speechSynthesis.cancel()
+document.getElementById("robotSpeech").innerText="Stopped"
+}
+
+/* -------- Highlight Text -------- */
+
+function highlight(sentence){
+
+const box=document.getElementById("readingText")
+const content=box.innerText
+
+const highlighted=content.replace(
+sentence,
+"<span class='highlight'>"+sentence+"</span>"
+)
+
+box.innerHTML=highlighted
+
+}
+
+/* -------- Confetti -------- */
+
+function celebrate(){
+
+for(let i=0;i<40;i++){
+
+const conf=document.createElement("div")
+conf.innerHTML="⭐"
+conf.className="confetti"
+conf.style.left=Math.random()*100+"%"
+
+document.body.appendChild(conf)
+
+}
+
+const speech=new SpeechSynthesisUtterance()
+speech.text="Great job! Your worksheet is ready."
+speech.rate=1
+
+window.speechSynthesis.speak(speech)
+
+}
+
+function toggleChat(){
+
+const box=document.getElementById("chatBox")
+
+if(box.style.display==="flex"){
+box.style.display="none"
+}else{
+box.style.display="flex"
+}
+
+}
+
+async function sendMessage(){
+
+const input=document.getElementById("chatInput")
+const msg=input.value.trim()
+
+if(!msg) return
+
+addMessage("You",msg)
+
+input.value=""
+
+try{
+
+const res=await fetch("/api/chat",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+message:msg,
+pdf_id:pdfId
+})
+})
+
+if(!res.ok){
+addMessage("AI","Server error")
+return
+}
+
+const data=await res.json()
+
+addMessage("AI",data.reply)
+
+}catch(err){
+
+console.error(err)
+addMessage("AI","Connection failed")
+
+}
+
+}
+
+
+
+function addMessage(sender,text){
+
+const box=document.getElementById("chatMessages")
+
+const div=document.createElement("div")
+
+div.style.marginBottom="10px"
+
+div.innerHTML="<b>"+sender+":</b> "+text
+
+box.appendChild(div)
+
+box.scrollTop=box.scrollHeight
+
+}
+window.onload = function(){
+
+const input = document.getElementById("chatInput")
+
+if(input){
+input.addEventListener("keydown", function(e){
+if(e.key === "Enter"){
+sendMessage()
+}
+})
+}
+
+}
+
+</script>
+<!-- AI CHAT BOX -->
+
+<div id="chatBox" style="
+position:fixed;
+bottom:20px;
+right:20px;
+width:320px;
+height:420px;
+background:white;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+display:none;
+flex-direction:column;
+">
+
+<div style="
+background:#4a5cff;
+color:white;
+padding:10px;
+font-weight:600;
+display:flex;
+justify-content:space-between;
+">
+AI Tutor
+<span onclick="toggleChat()" style="cursor:pointer">✖</span>
+</div>
+
+<div id="chatMessages"
+style="
+flex:1;
+overflow:auto;
+padding:10px;
+font-size:14px;
+">
+</div>
+
+<div style="
+display:flex;
+border-top:1px solid #eee;
+padding:8px;
+gap:6px;
+">
+
+<input id="chatInput"
+style="
+flex:1;
+border:1px solid #ccc;
+border-radius:6px;
+padding:8px;
+font-size:14px;
+"
+placeholder="Ask about the lesson...">
+
+<button onclick="sendMessage()" style="
+background:#4a5cff;
+color:white;
+border:none;
+border-radius:6px;
+padding:8px 14px;
+cursor:pointer;
+">
+Send
+</button>
+
+</div>
+
+</div> <!-- end chatBox -->
+
+<button onclick="toggleChat()" style="
+position:fixed;
+bottom:20px;
+right:20px;
+background:#4a5cff;
+color:white;
+border:none;
+padding:12px 16px;
+border-radius:10px;
+cursor:pointer;
+z-index:999;
+">
+AI Help
+</button>
+</body>
+</html>

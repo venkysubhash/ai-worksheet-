@@ -1,0 +1,532 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>AI Learning Studio</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+
+<style>
+
+/* ---------- Background ---------- */
+
+/* Background with dim overlay */
+body{
+margin:0;
+font-family:"Inter","Segoe UI",sans-serif;
+min-height:100vh;
+
+background:url("/static/css/bg.webp") center/cover no-repeat fixed;
+
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.35); /* dim background */
+z-index:-1;
+}
+
+/* Improve text clarity */
+.hero-title{
+text-align:left;
+max-width:520px;
+}
+
+.hero-text{
+max-width:500px;
+}
+/* Card contrast */
+.upload-card{
+background:rgba(255,255,255,0.92);
+backdrop-filter:blur(6px);
+}
+/* ---------- Layout ---------- */
+
+.container{
+max-width:1200px;
+width:100%;
+padding:40px 30px;
+}
+
+/* ---------- Header ---------- */
+
+.header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:60px;
+
+}
+
+.logo{
+
+font-size:28px;
+font-weight:700;
+color:#3f51ff;
+
+}
+
+.tag{
+
+font-size:14px;
+color:#777;
+
+}
+
+/* ---------- Hero ---------- */
+
+.hero{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:50px;
+
+align-items:center;
+
+}
+
+.hero-title{
+
+font-size:42px;
+font-weight:700;
+
+line-height:1.2;
+
+margin-bottom:20px;
+
+color:#111;
+
+}
+
+.hero-text{
+
+font-size:17px;
+color:#555;
+
+margin-bottom:35px;
+
+}
+
+/* ---------- Card ---------- */
+
+.upload-card{
+
+background:white;
+
+border-radius:18px;
+
+padding:40px;
+
+box-shadow:0 20px 40px rgba(0,0,0,.08);
+
+}
+
+/* ---------- Inputs ---------- */
+
+.row{
+
+margin-bottom:20px;
+
+}
+
+label{
+
+font-size:14px;
+font-weight:600;
+
+display:block;
+margin-bottom:6px;
+
+}
+
+input[type=text],
+input[type=file]{
+
+width:100%;
+padding:14px;
+
+border-radius:10px;
+border:1px solid #e2e6ff;
+
+font-size:15px;
+
+}
+
+/* ---------- Button ---------- */
+
+button{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+border-radius:12px;
+
+background:#4a5cff;
+
+color:white;
+
+font-size:16px;
+font-weight:600;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+button:hover{
+
+background:#3a48db;
+
+}
+
+/* ---------- Robot Area ---------- */
+
+.robot-container{
+
+text-align:center;
+
+position:relative;
+
+}
+
+/* Robot image */
+
+.robot{
+
+width:150px;
+
+animation:float 4s infinite ease-in-out;
+
+}
+
+/* Floating motion */
+
+@keyframes float{
+
+0%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+100%{transform:translateY(0)}
+
+}
+
+/* ---------- Eyes ---------- */
+
+.eye{
+
+width:12px;
+height:12px;
+
+background:#111;
+
+border-radius:50%;
+
+position:absolute;
+
+}
+
+/* Eye positions */
+
+.eye-left{
+
+top:63px;
+left:66px;
+
+}
+
+.eye-right{
+
+top:63px;
+left:94px;
+
+}
+
+/* Blinking animation */
+
+.eye{
+
+animation:blink 4s infinite;
+
+}
+
+@keyframes blink{
+
+0%{transform:scaleY(1)}
+90%{transform:scaleY(1)}
+95%{transform:scaleY(.1)}
+100%{transform:scaleY(1)}
+
+}
+
+/* ---------- Speech Bubble ---------- */
+
+.robot-speech{
+
+margin-top:20px;
+
+background:#4a5cff;
+color:white;
+
+padding:12px 20px;
+
+border-radius:20px;
+
+display:inline-block;
+
+font-size:14px;
+
+box-shadow:0 10px 20px rgba(0,0,0,.1);
+
+}
+
+/* ---------- Loader ---------- */
+
+#loadingOverlay{
+
+position:fixed;
+inset:0;
+
+background:white;
+
+display:none;
+
+align-items:center;
+justify-content:center;
+flex-direction:column;
+
+z-index:999;
+
+}
+
+.spinner{
+
+width:60px;
+height:60px;
+
+border-radius:50%;
+
+border:6px solid #e5e7ff;
+border-top:6px solid #4a5cff;
+
+animation:spin 1s linear infinite;
+
+margin-bottom:20px;
+
+}
+
+@keyframes spin{
+
+to{transform:rotate(360deg)}
+
+}
+
+.status{
+
+font-size:18px;
+color:#444;
+
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:900px){
+
+.hero{
+grid-template-columns:1fr;
+}
+
+.hero-title{
+font-size:34px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="loadingOverlay">
+
+<div class="spinner"></div>
+
+<div class="status" id="statusText">
+Preparing learning kit...
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="header">
+
+<div class="logo">AI Learning Studio</div>
+
+<div class="tag">Smart worksheets powered by AI</div>
+
+</div>
+
+<div class="hero">
+
+<div>
+
+<h1 class="hero-title">
+Turn any lesson into an interactive learning kit
+</h1>
+
+<p class="hero-text">
+Upload a textbook page and our AI will create worksheets,
+quizzes and learning activities automatically.
+</p>
+
+<div class="upload-card">
+
+<form id="generateForm"
+action="/generate"
+method="post"
+enctype="multipart/form-data">
+
+<div class="row">
+<label>Class</label>
+<input type="text" name="class_name" required>
+</div>
+
+<div class="row">
+<label>Subject</label>
+<input type="text" name="subject" required>
+</div>
+
+<div class="row">
+<label>Chapter</label>
+<input type="text" name="chapter" required>
+</div>
+
+<div class="row">
+<label>Upload Lesson PDF</label>
+<input type="file" name="pdf" accept=".pdf" required>
+</div>
+
+<button>
+Generate Learning Kit
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- Robot -->
+
+<div class="robot-container">
+
+<img
+src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+class="robot"
+id="robot">
+
+<div class="eye eye-left"></div>
+<div class="eye eye-right"></div>
+
+<div class="robot-speech" id="robotGreeting">
+{{ greeting }}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* -------- Robot Greeting -------- */
+
+function robotGreeting(){
+
+const hour=new Date().getHours()
+
+let message=""
+
+if(hour<12)
+message="Good morning! Ready to learn something new?"
+
+else if(hour<17)
+message="Good afternoon! Let's explore a lesson!"
+
+else
+message="Good evening! Time for a fun learning adventure!"
+
+document.getElementById("robotGreeting").innerText=message
+
+}
+
+robotGreeting()
+
+/* -------- Loader -------- */
+
+const form=document.getElementById("generateForm")
+const overlay=document.getElementById("loadingOverlay")
+const statusText=document.getElementById("statusText")
+
+const steps=[
+"Reading PDF...",
+"Extracting concepts...",
+"Generating activities...",
+"Building worksheet...",
+"Finalizing..."
+]
+
+form.addEventListener("submit",function(){
+
+overlay.style.display="flex"
+
+let i=0
+
+setInterval(()=>{
+
+if(i<steps.length){
+
+statusText.innerText=steps[i]
+i++
+
+}
+
+},1200)
+
+})
+
+</script>
+<script>
+
+window.onload = function(){
+
+const text = document.getElementById("robotGreeting").innerText
+
+const speech = new SpeechSynthesisUtterance()
+
+speech.text = text
+speech.rate = 0.9
+speech.pitch = 1.2
+
+window.speechSynthesis.speak(speech)
+
+}
+
+</script>
+</body>
+</html> -->

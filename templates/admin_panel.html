@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Head Control</title>
+</head>
+
+<body>
+<a href="/admin-report" style="display:block;margin-bottom:20px;">
+Download Full Report PDF
+</a>
+<h3>Users</h3>
+<table border="1">
+<thead>
+<tr>
+<th>Username</th>
+<th>Role</th>
+<th>Created</th>
+</tr>
+</thead>
+<tbody id="usersTable"></tbody>
+</table>
+
+<h3>Downloads</h3>
+<table border="1">
+<thead>
+<tr>
+<th>Username</th>
+<th>File</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody id="downloadsTable"></tbody>
+</table>
+<script>
+fetch("/admin-data")
+.then(res => res.json())
+.then(data => {
+
+    const usersTable = document.getElementById("usersTable")
+    const downloadsTable = document.getElementById("downloadsTable")
+
+    data.users.forEach(u => {
+        usersTable.innerHTML += `
+        <tr>
+            <td>${u.username}</td>
+            <td>${u.role}</td>
+            <td>${u.created_at}</td>
+        </tr>`
+    })
+
+    data.downloads.forEach(d => {
+        downloadsTable.innerHTML += `
+        <tr>
+            <td>${d.username}</td>
+            <td>${d.file_name}</td>
+            <td>${d.download_time}</td>
+        </tr>`
+    })
+
+})
+</script>
+
+</body>
+</html>

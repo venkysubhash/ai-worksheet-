@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Learning Studio | Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ------------------------------------------------
+BASE
+------------------------------------------------ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:"Inter",sans-serif;
+height:100vh;
+
+background:url("/static/css/20082.jpg") center/cover no-repeat fixed;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+overflow:hidden;
+}
+
+/* dark overlay */
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.15);
+z-index:-1;
+}
+
+/* floating shapes */
+
+
+@keyframes float{
+
+0%{transform:translateY(0)}
+50%{transform:translateY(-40px)}
+100%{transform:translateY(0)}
+
+}
+
+/* ------------------------------------------------
+LOGIN CARD
+------------------------------------------------ */
+
+.login-container{
+width:520px;
+padding:65px;
+
+border-radius:24px;
+
+background:rgba(255,255,255,0.12);
+
+backdrop-filter:blur(20px);
+
+border:1px solid rgba(255,255,255,0.25);
+
+box-shadow:0 25px 60px rgba(0,0,0,.55);
+
+color:rgb(0, 0, 0);
+
+animation:fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* ------------------------------------------------
+TITLE
+------------------------------------------------ */
+
+.logo{
+font-size:32px;
+font-weight:700;
+text-align:center;
+margin-bottom:8px;
+letter-spacing:.3px;
+}
+
+.subtitle{
+text-align:center;
+font-size:14px;
+opacity:.8;
+margin-bottom:30px;
+}
+
+/* ------------------------------------------------
+FORM
+------------------------------------------------ */
+
+.form-group{
+margin-bottom:20px;
+}
+
+label{
+font-size:13px;
+font-weight:600;
+margin-bottom:6px;
+display:block;
+}
+
+input{
+width:100%;
+padding:18px;
+
+border-radius:12px;
+
+border:1px solid rgba(255,255,255,.25);
+
+background:rgba(255,255,255,.15);
+
+color:rgb(4, 4, 4);
+
+font-size:16px;
+
+outline:none;
+
+transition:.25s;
+}
+
+input:focus{
+
+border-color:#7c3aed;
+
+box-shadow:0 0 0 3px rgba(124,58,237,.35);
+
+}
+
+/* ------------------------------------------------
+BUTTON
+------------------------------------------------ */
+
+.login-btn{
+
+width:100%;
+padding:18px;
+
+border:none;
+
+border-radius:12px;
+
+font-weight:600;
+
+font-size:17px;
+
+cursor:pointer;
+
+background:linear-gradient(
+135deg,
+#ff2d95,
+#c026d3,
+#7c3aed
+);
+
+transition:.25s;
+}
+
+.login-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 12px 30px rgba(0,0,0,.45);
+
+}
+
+/* ------------------------------------------------
+LINK
+------------------------------------------------ */
+
+.register{
+margin-top:18px;
+text-align:center;
+font-size:14px;
+}
+
+.register a{
+color:white;
+font-weight:600;
+text-decoration:none;
+}
+
+/* ------------------------------------------------
+TIMER CORNER
+------------------------------------------------ */
+
+#timerBox{
+
+position:fixed;
+
+top:20px;
+right:20px;
+
+background:rgba(0,0,0,0.5);
+
+padding:10px 15px;
+
+border-radius:10px;
+
+font-weight:600;
+
+color:white;
+
+backdrop-filter:blur(10px);
+
+box-shadow:0 8px 20px rgba(0,0,0,.45);
+
+}
+
+/* ------------------------------------------------
+RESPONSIVE
+------------------------------------------------ */
+
+@media(max-width:500px){
+
+.login-container{
+width:90%;
+padding:35px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div id="timerBox">
+⏱ <span id="timer">00:00</span>
+</div>
+
+<div class="login-container">
+
+<div class="logo">
+AI Learning Studio
+</div>
+
+<div class="subtitle">
+Login to continue
+</div>
+
+<form method="POST" action="/login">
+
+<div class="form-group">
+<label>Username</label>
+<input name="username" required>
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input type="password" name="password" required>
+</div>
+
+<button class="login-btn">
+Login
+</button>
+
+</form>
+<button onclick="openHeadLogin()" style="margin-top:10px;width:100%;background:black;color:white;">
+Head Control
+</button>
+
+<div class="register">
+Don't have an account?  
+<a href="/register">Create one</a>
+</div>
+
+</div>
+
+<script>
+
+/* session timer */
+
+function updateTime(){
+
+const now = new Date()
+
+const options = {
+timeZone: "Asia/Kolkata",
+hour: "2-digit",
+minute: "2-digit",
+second: "2-digit",
+hour12: false
+}
+
+document.getElementById("timer").innerText =
+now.toLocaleTimeString("en-IN", options)
+
+}
+
+setInterval(updateTime,1000)
+
+updateTime()
+
+</script>
+<div id="headBox" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+">
+
+<div style="
+background:white;
+padding:25px;
+border-radius:12px;
+width:300px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+">
+<h3>Head Login</h3>
+
+<input id="headUser" placeholder="Username" style="width:100%;padding:10px;color:black;background:white;border:1px solid #ccc;">
+<br><br>
+<input id="headPass" type="password" placeholder="Password" style="width:100%;padding:10px;color:black;background:white;border:1px solid #ccc;">
+<button onclick="checkHead()" style="
+width:100%;
+padding:10px;
+background:#7c3aed;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+">
+Login
+</button>
+<script>
+
+function openHeadLogin(){
+    document.getElementById("headBox").style.display="flex"
+}
+
+function checkHead(){
+
+    const u = document.getElementById("headUser").value
+    const p = document.getElementById("headPass").value
+
+    if(u === "subhash" && p === "subhash123"){
+        window.location.href = "/head-control"
+    }else{
+       document.getElementById("errorMsg").innerText = "Invalid username or password"
+    }
+}
+
+</script>
+
+</div>
+</div>
+</body>
+</html>
