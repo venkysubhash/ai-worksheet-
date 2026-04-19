@@ -96,10 +96,10 @@ def admin_data(request: Request):
 @app.get("/head-control", response_class=HTMLResponse)
 def head_control(request: Request):
 
-    user = get_current_user(request)
-
-    if user["role"] != "admin":
-        raise HTTPException(status_code=403)
+    try:
+        user = get_current_user(request)
+    except:
+        user = {"username": "Guest", "role": "guest"}
 
     from database import get_connection
 
@@ -498,7 +498,12 @@ async def chat(request: Request):
 
             from pdf_engine import extract_text_and_images_from_pdf
 
-            text, _ = extract_text_and_images_from_pdf(f"lesson_files/{pdf_id}")
+            result = extract_text_and_images_from_pdf(f"lesson_files/{pdf_id}")
+
+            if isinstance(result, tuple):
+                text = result[0]
+            else:
+                text = result
             index, chunks = build_index(text)
 
             context = search_index(index, chunks, message)
@@ -561,11 +566,13 @@ def preview_pdf(pdf: str):
 @app.get("/admin-report")
 def admin_report():
 
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    import reportlab.lib.styles
     from database import get_connection
 
     path = os.path.join(BASE_DIR, "static", "generated", "admin_report.pdf")
 
-    styles = getSampleStyleSheet()
+    styles = reportlab.lib.styles.getSampleStyleSheet()
     doc = SimpleDocTemplate(path)
 
     content = []

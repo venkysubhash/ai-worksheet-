@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,7 +13,10 @@
 <style>
 
 /* ---------- Background ---------- */
-
+#ai-tutor{
+position:fixed;
+z-index:9999;
+}
 /* Background with dim overlay */
 body{
 margin:0;
@@ -295,20 +298,17 @@ box-shadow:0 10px 20px rgba(0,0,0,.1);
 /* ---------- Loader ---------- */
 
 #loadingOverlay{
-
 position:fixed;
 inset:0;
-
-background:white;
+background:rgba(255,255,255,0.4);  /* lighter */
 
 display:none;
-
 align-items:center;
 justify-content:center;
 flex-direction:column;
 
-z-index:999;
-
+z-index:1;              /* 🔥 LOWER VALUE */
+pointer-events:none;    /* 🔥 MOST IMPORTANT */
 }
 
 .spinner{
@@ -420,7 +420,7 @@ enctype="multipart/form-data">
 <input type="file" name="pdf" accept=".pdf" required>
 </div>
 
-<button>
+<button type="button" onclick="generateWorksheet()">
 Generate Learning Kit
 </button>
 
@@ -430,7 +430,7 @@ Generate Learning Kit
 
 </div>
 
-<!-- Robot -->
+Robot
 
 <div class="robot-container">
 
@@ -491,24 +491,7 @@ const steps=[
 "Finalizing..."
 ]
 
-form.addEventListener("submit",function(){
 
-overlay.style.display="flex"
-
-let i=0
-
-setInterval(()=>{
-
-if(i<steps.length){
-
-statusText.innerText=steps[i]
-i++
-
-}
-
-},1200)
-
-})
 
 </script>
 <script>
@@ -525,8 +508,59 @@ speech.pitch = 1.2
 
 window.speechSynthesis.speak(speech)
 
+
 }
 
 </script>
+
+<script>
+async function generateWorksheet(){
+
+const overlay=document.getElementById("loadingOverlay")
+const statusText=document.getElementById("statusText")
+
+overlay.style.display="flex"
+
+const steps=[
+"Reading PDF...",
+"Extracting concepts...",
+"Generating activities...",
+"Building worksheet...",
+"Finalizing..."
+]
+
+let i=0
+const interval=setInterval(()=>{
+if(i<steps.length){
+statusText.innerText=steps[i]
+i++
+}
+},1200)
+
+const form=document.getElementById("generateForm")
+const formData=new FormData(form)
+
+try{
+const response=await fetch("/generate",{
+method:"POST",
+body:formData
+})
+
+const blob=await response.blob()
+
+const url=window.URL.createObjectURL(blob)
+const a=document.createElement("a")
+a.href=url
+a.download="worksheet.pdf"
+a.click()
+
+}catch(e){
+console.error(e)
+}
+
+clearInterval(interval)
+overlay.style.display="none"
+}
+</script>
 </body>
-</html> -->
+</html>
