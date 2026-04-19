@@ -4,7 +4,7 @@
 
 import re
 import json
-import ollama
+# import ollama
 import spacy
 from collections import Counter
 
